@@ -23,3 +23,8 @@ export type DateType = {
     month: string,
     date: string
 }
+
+export type SearchType = {
+    isCreateDateSearch: boolean,
+    isTaskNameSearch: boolean
+}

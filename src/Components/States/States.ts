@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { TaskType, TaskStateType, DateType } from "../../Types/GlobalType";
+import { TaskType, TaskStateType, DateType, SearchType } from "../../Types/GlobalType";
 
 export const SignInOrRegisterState = atom<boolean>({
     key: 'SignInOrRegisterState',
@@ -93,6 +93,11 @@ export const ProgressTodosState = atom<TaskType[]>({
     ]
 })
 
+export const SearchProgressTodosState = atom<TaskType[]>({
+    key: 'SearchProgressTodosState',
+    default: []
+})
+
 export const CompleteTodosState = atom<TaskType[]>({
     key: 'CompleteTodosState',
     default: [
@@ -119,8 +124,25 @@ export const CompleteTodosState = atom<TaskType[]>({
     ]
 })
 
+export const SearchCompleteTodosState = atom<TaskType[]>({
+    key: 'SearchCompleteTodosState',
+    default: []
+})
+
 export const TaskState = atom<TaskStateType>({
     key: 'TaskState',
+    default: {
+        todoTitle: '',
+        taskState: '',
+        year: '',
+        month: '',
+        date: '',
+        comment: ''
+    }
+})
+
+export const SearchTaskState = atom<TaskStateType>({
+    key: '',
     default: {
         todoTitle: '',
         taskState: '',
@@ -150,7 +172,15 @@ export const SearchDateState = atom<DateType>({
     }
 })
 
-export const SearchState = atom<boolean>({
+export const SearchState = atom<SearchType>({
     key: 'SearchState',
-    default: false
+    default: {
+        isCreateDateSearch: false,
+        isTaskNameSearch: false
+    }
+})
+
+export const SearchTaskNameState = atom<string>({
+    key: 'SearchTaskNameState',
+    default: ''
 })

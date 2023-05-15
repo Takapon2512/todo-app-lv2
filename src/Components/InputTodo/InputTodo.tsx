@@ -57,7 +57,7 @@ export const InputTodo = () => {
             <Paper sx={{p: 2}}>
                 <TextField 
                 id="outlined-search" 
-                label="新規ToDoを入力" 
+                label="新規ToDoを入力後にEnter" 
                 fullWidth
                 onChange={onChangeTodotext}
                 value={inputTodo}

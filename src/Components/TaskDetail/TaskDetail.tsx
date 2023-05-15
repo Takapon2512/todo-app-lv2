@@ -46,7 +46,7 @@ export const TaskDetail = () => {
             case 'complete':
                 return '完了'
             default:
-                return ''
+                return '-'
         }
     }
 

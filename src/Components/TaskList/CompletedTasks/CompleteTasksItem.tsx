@@ -1,11 +1,13 @@
 import React from 'react'
-import { useSetRecoilState, useRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
 import { 
-    ClickTodoState,
     CompleteTodosState, 
     ProgressTodosState, 
+    SearchCompleteTodosState, 
     TaskDetailState, 
-    TaskState 
+    TaskState ,
+    ClickTodoState,
+    SearchState
 } from '../../States/States'
 import { TaskType } from '../../../Types/GlobalType'
 import { Undo, Delete } from '@mui/icons-material'
@@ -21,13 +23,20 @@ import {
 } from '@mui/material'
 
 export const CompleteTasksItem = () => {
+    //完了Todoを管理
     const [completeTodos, setCompleteTodos] = useRecoilState(CompleteTodosState)
+    //完了（検索モード）Todoを管理
+    const searchCompleteTodos = useRecoilValue(SearchCompleteTodosState)
+
     const [progressTodos, setProgressTodos] = useRecoilState(ProgressTodosState)
 
     const setTaskStatus = useSetRecoilState(TaskState)
     const setClickTodo = useSetRecoilState(ClickTodoState)
 
     const setTaskDetail = useSetRecoilState(TaskDetailState)
+
+    //モード（通常・検索）を取得
+    const isSearch = useRecoilValue(SearchState)
 
     const onCardClick = (item: TaskType, index: number) => {
         setTaskStatus({
@@ -89,72 +98,140 @@ export const CompleteTasksItem = () => {
                 完了
             </Typography>
             <List>
-                {
-                    completeTodos.map((item: TaskType, index: number) => (
-                        <Card sx={{
-                            mb: 1,
-                            ':hover': {
-                                cursor: 'pointer',
-                                bgcolor: '#efefef'
-                            }
-                            }}
-                            key={item.id}
-                            onClick={() => onCardClick(item, index)}
-                            >
-                            <CardContent sx={{
-                                p: '12px', 
-                                position: 'relative',
-                                ':last-child': {p: '12px'}
-                            }}>
-                                {item.todoTitle}
-                                <ButtonGroup 
-                                    size='small'
-                                    variant='contained'
-                                    sx={{
-                                        p: '0px',
-                                        position: 'absolute',
-                                        zIndex: 2,
-                                        top: '10px',
-                                        right: '8px',
-                                        opacity: 0,
-                                        transition: 'opacity 0.2s',
-                                        ':last-child': {p: '0px'},
-                                        ':hover': {
-                                            opacity: 1
-                                        }
-                                    }}>
-                                    <Button 
-                                    onClick={() => handleBack(item, index)}
-                                    sx={{
-                                        bgcolor: grey[100],
-                                        borderColor: grey[400],
-                                        ':hover': {
-                                            bgcolor: grey[300]
-                                        }
-                                    }}>
-                                        <Undo 
-                                        fontSize='small' 
+                {   //検索モード
+                    isSearch.isCreateDateSearch || isSearch.isTaskNameSearch ? (
+                        searchCompleteTodos.map((item: TaskType, index: number) => (
+                            <Card sx={{
+                                mb: 1,
+                                ':hover': {
+                                    cursor: 'pointer',
+                                    bgcolor: '#efefef'
+                                }
+                                }}
+                                key={item.id}
+                                onClick={() => onCardClick(item, index)}
+                                >
+                                <CardContent sx={{
+                                    p: '12px', 
+                                    position: 'relative',
+                                    ':last-child': {p: '12px'}
+                                }}>
+                                    {item.todoTitle}
+                                    <ButtonGroup 
+                                        size='small'
+                                        variant='contained'
                                         sx={{
-                                            color: grey[500],
-                                        }}/>
-                                    </Button>
-                                    <Button
-                                    onClick={() => handleDelete(index)}
-                                    sx={{
-                                        bgcolor: grey[100],
-                                        ':hover': {
-                                            bgcolor: grey[300]
-                                        }
-                                    }}>
-                                        <Delete 
-                                        fontSize='small' 
-                                        sx={{color: grey[500]}}
-                                        />
-                                    </Button>
-                                </ButtonGroup>
-                            </CardContent>
-                        </Card>
-                    ))
+                                            p: '0px',
+                                            position: 'absolute',
+                                            zIndex: 2,
+                                            top: '10px',
+                                            right: '8px',
+                                            opacity: 0,
+                                            transition: 'opacity 0.2s',
+                                            ':last-child': {p: '0px'},
+                                            ':hover': {
+                                                opacity: 1
+                                            }
+                                        }}>
+                                        <Button 
+                                        onClick={() => handleBack(item, index)}
+                                        sx={{
+                                            bgcolor: grey[100],
+                                            borderColor: grey[400],
+                                            ':hover': {
+                                                bgcolor: grey[300]
+                                            }
+                                        }}>
+                                            <Undo 
+                                            fontSize='small' 
+                                            sx={{
+                                                color: grey[500],
+                                            }}/>
+                                        </Button>
+                                        <Button
+                                        onClick={() => handleDelete(index)}
+                                        sx={{
+                                            bgcolor: grey[100],
+                                            ':hover': {
+                                                bgcolor: grey[300]
+                                            }
+                                        }}>
+                                            <Delete 
+                                            fontSize='small' 
+                                            sx={{color: grey[500]}}
+                                            />
+                                        </Button>
+                                    </ButtonGroup>
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        completeTodos.map((item: TaskType, index: number) => (
+                            <Card sx={{
+                                mb: 1,
+                                ':hover': {
+                                    cursor: 'pointer',
+                                    bgcolor: '#efefef'
+                                }
+                                }}
+                                key={item.id}
+                                onClick={() => onCardClick(item, index)}
+                                >
+                                <CardContent sx={{
+                                    p: '12px', 
+                                    position: 'relative',
+                                    ':last-child': {p: '12px'}
+                                }}>
+                                    {item.todoTitle}
+                                    <ButtonGroup 
+                                        size='small'
+                                        variant='contained'
+                                        sx={{
+                                            p: '0px',
+                                            position: 'absolute',
+                                            zIndex: 2,
+                                            top: '10px',
+                                            right: '8px',
+                                            opacity: 0,
+                                            transition: 'opacity 0.2s',
+                                            ':last-child': {p: '0px'},
+                                            ':hover': {
+                                                opacity: 1
+                                            }
+                                        }}>
+                                        <Button 
+                                        onClick={() => handleBack(item, index)}
+                                        sx={{
+                                            bgcolor: grey[100],
+                                            borderColor: grey[400],
+                                            ':hover': {
+                                                bgcolor: grey[300]
+                                            }
+                                        }}>
+                                            <Undo 
+                                            fontSize='small' 
+                                            sx={{
+                                                color: grey[500],
+                                            }}/>
+                                        </Button>
+                                        <Button
+                                        onClick={() => handleDelete(index)}
+                                        sx={{
+                                            bgcolor: grey[100],
+                                            ':hover': {
+                                                bgcolor: grey[300]
+                                            }
+                                        }}>
+                                            <Delete 
+                                            fontSize='small' 
+                                            sx={{color: grey[500]}}
+                                            />
+                                        </Button>
+                                    </ButtonGroup>
+                                </CardContent>
+                            </Card>
+                        ))
+                    )
                 }
             </List>
         </>
